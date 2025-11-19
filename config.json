@@ -1,0 +1,11 @@
+{
+  "data": {
+    "extensions": ["txt", "md", "json"]
+  },
+  "max_workers": 4,
+  "llm": {
+    "model": "gpt-4-turbo",
+    "temperature": 0.7,
+    "maxTokens": 1500
+  }
+}
