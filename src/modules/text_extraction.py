@@ -1,12 +1,12 @@
 import os 
-from typing import List, Tuple
+from typing import List 
 
 from utils import verbose_print
 
 from models.document import Document
 from models.page import Page 
 
-def text_extraction(document_types: List[str], documents_path: str) -> Tuple[List[Document], List[Page]]:
+def text_extraction(document_types: List[str], documents_path: str) -> List[Document]:
     """
     Etapa 1: Cargar documentos de texto desde el directorio especificado.
     Soporta archivos con extensiones definidas en 'document_types'.
@@ -47,4 +47,4 @@ def text_extraction(document_types: List[str], documents_path: str) -> Tuple[Lis
 
     print(f"[Text Extraction] Loaded {len(documents)} documents with a total of {len(pages)} pages.") 
 
-    return documents, pages 
+    return documents 

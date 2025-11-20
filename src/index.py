@@ -3,10 +3,16 @@ import json
 # Importar la configuración 
 config = json.load(open("config.json", "r"))
 
+# Importar los modelos
+from models.content import Content
+from models.document import Document
+
+# Importar utilidades
 from utils import verbose_print
 
-# Importar las stages 
+# Importar las etapas del procesamiento 
 from modules.text_extraction import text_extraction  
+from modules.split_contents import split_contents
 # from modules.extract_latex import extract_latex  
 # from modules.latex_to_natural import latex_to_natural  
 
@@ -16,15 +22,18 @@ def main():
     print("Creado por Fernando Rivera (https://asterkiwebsite.vercel.app)")
     print("Utiliza --verbose para salida detallada")
     print("=============================================================")
-    print("\n")
-
-    print("=============================================================")
     print("Cargando configuración desde config.json")
-    verbose_print(f"Configuración cargada: {config}")
+    print(f"Configuración cargada: {config}")
     print("=============================================================")
     print("Iniciando Etapa 1: Carga de Documentos de Texto")
-    text_documents = text_extraction(config["data"]["extensions"], config["data"]["documents_path"])
-    print(f"Etapa 1 completada. Documentos cargados: {len(text_documents)}")
+    documents: list[Document] = text_extraction(config["data"]["extensions"], config["data"]["documents_path"])
+    print(f"Etapa 1 completada. Documentos cargados: {len(documents)}")
+    verbose_print(f"  Documents: {documents[0:10]}")
+    print("=============================================================")
+    print("Iniciando Etapa 2.1: Separación de Contenidos en Capítulos, Secciones y Contenidos")
+    contents: list[Content] = split_contents(documents)
+    print(f"Etapa 2 completada. Contenidos Encontrados: {len(contents)}")
+    verbose_print(f"  Contents: {contents[0:10]}") 
     print("=============================================================")
 
 
