@@ -1,12 +1,10 @@
-import uuid
-
 from models.content import Content
 from models.page import Page
 from models.section import Section
 
 class Chapter:
-    def __init__(self, source_document):
-        self.id = str(uuid.uuid4())
+    def __init__(self, source_document, name):
+        self.name = name
 
         # Parent
         self.source_document = source_document
@@ -18,5 +16,5 @@ class Chapter:
         self.pages: list[Page] = []
 
     def __repr__(self):
-        return f"Chapter(id={self.id}, source_document={self.source_document}, sections_count={len(self.sections)}, contents_count={len(self.contents)})"
+        return f"Chapter(name={self.name}, source_document={self.source_document}, sections_count={len(self.sections)}, contents_count={len(self.contents)})"
 

@@ -8,7 +8,7 @@ from models.section import Section
 
 from utils import verbose_print
 
-def split_contents(documents: list[Document]) -> Tuple[list[Chapter], list[Section], list[Content]]:
+def split_contents(documents: list[Document]) -> Tuple[list[Document], list[Chapter], list[Section], list[Content]]:
     """
     Etapa 2.1: Cargar documentos y separar su contenido en capítulos, secciones y contenidos.  
 
@@ -22,33 +22,37 @@ def split_contents(documents: list[Document]) -> Tuple[list[Chapter], list[Secti
     sections: list[Section] = []
     contents: list[Content] = []
 
+
     for document in documents:
-        verbose_print(f"[Split Contents] Processing document: {document.name}")
-
+        current_chapter = Chapter(source_document=document, name="") 
+        current_section = Section(source_chapter=current_chapter, source_document=document)
         for page in document.pages:
-            verbose_print(f"[Split Contents]  Processing page from document: {document.name}")
+            page_lines = page.content.split("\n") 
+            current_section = None 
 
-            # Simple splitting logic based on headings
-            lines = page.content.split("\n")
-            current_chapter = None
-            current_section = None
-
-            for line in lines:
-                line = line.strip()
-                if line.startswith("Chapter "):
-                    current_chapter = Chapter(title=line, parent_document=document)
-                    chapters.append(current_chapter)
-                    verbose_print(f"[Split Contents]   Found chapter: {line}")
-                elif line.startswith("Section "):
-                    current_section = Section(title=line, parent_chapter=current_chapter)
+            for line in page_lines: 
+                if line.startswith("## "): # New Chapter
+                    current_chapter = Chapter(source_document=document, name=line[2:].strip())
+                   
+                    if current_chapter not in chapters:
+                        chapters.append(current_chapter)
+                        document.chapters.append(current_chapter)
+                        verbose_print(f"[Split Contents] Created chapter:  from document: {document.name}")
+                
+                elif line.startswith("### "): # New Section
+                    
+                    current_section = Section(source_chapter=current_chapter, source_document=document)
                     sections.append(current_section)
-                    verbose_print(f"[Split Contents]    Found section: {line}")
-                elif line:
-                    content = Content(text=line, parent_section=current_section)
-                    contents.append(content)
-                    verbose_print(f"[Split Contents]     Found content: {line[:30]}...")
+                    verbose_print(f"[Split Contents] Created section: in chapter")
 
-    print(f"[Split Contents] Extracted {len(chapters)} chapters, {len(sections)} sections, and {len(contents)} contents.")
+                else:
+                    # Content
+                    if current_section is not None:
+                        content = Content(source_section=current_section, source_chapter=current_chapter, source_document=document, content=line, content_type="text")
+                        contents.append(content)
+                        verbose_print(f"[Split Contents] Added content to section") 
 
-    return chapters, sections, contents 
+    print(f"[Split Contents] Created {len(chapters)} chapters, {len(sections)} sections, and {len(contents)} contents.")
+
+    return documents, chapters, sections, contents 
 

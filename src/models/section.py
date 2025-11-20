@@ -4,8 +4,9 @@ from models.content import Content
 from models.page import Page
 
 class Section:
-    def __init__(self, source_chapter, source_document):
+    def __init__(self, source_chapter, source_document, name=""):
         self.id = str(uuid.uuid4())
+        self.name = name
 
         # Parents 
         self.source_chapter = source_chapter
@@ -18,7 +19,7 @@ class Section:
         self.pages: list[Page] = []
 
     def __repr__(self):
-        return f"Section(id={self.id}, source_chapter={self.source_chapter}, contents_count={len(self.contents)})"
+        return f"Section(id={self.id}, name={self.name}, source_chapter={self.source_chapter}, contents_count={len(self.contents)})"
 
 
 

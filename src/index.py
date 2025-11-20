@@ -37,6 +37,9 @@ def main():
     print("=============================================================")
 
 
+    print("From book", contents[0][3].name)
+    for chapter in contents[0][3].chapters:
+        print(" - Chapter:", chapter.name)
     
     # return; # Desactivar la ejecución de las etapas por ahora 
     #
