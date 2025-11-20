@@ -1,5 +1,3 @@
-import os 
-import re 
 import json
 
 # Importar la configuración 
@@ -22,6 +20,8 @@ def main():
 
     print("Cargando configuración desde config.json")
     verbose_print(f"Configuración cargada: {config}")
+
+    print("Iniciando Etapa 0: Extracción de texto de los documentos")
 
     print("Iniciando Etapa 1: Carga de Documentos de Texto")
     text_documents = read_data_dir(config["data"]["extensions"])
