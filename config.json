@@ -1,6 +1,7 @@
 {
   "data": {
-    "extensions": ["txt", "md", "json"]
+    "extensions": ["txt", "md", "json"],
+    "documents_path": "./data"
   },
   "max_workers": 4,
   "llm": {

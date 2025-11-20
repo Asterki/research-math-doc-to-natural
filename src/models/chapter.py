@@ -1,17 +1,22 @@
 import uuid
 
-from models.page import Page 
+from models.content import Content
+from models.page import Page
+from models.section import Section
 
 class Chapter:
-    def __init__(self, source: Page, content: str, sections: list = []):
+    def __init__(self, source_document):
         self.id = str(uuid.uuid4())
-        self.source = source
-        self.content = content
-        self.sections = sections
+
+        # Parent
+        self.source_document = source_document
+
+        # Children
+        self.sections: list[Section] = [] 
+        self.contents: list[Content] = [] 
+        
+        self.pages: list[Page] = []
 
     def __repr__(self):
-        return f"Chapter(id={self.id}, source={self.source}, content_length={len(self.content)}, sections_count={len(self.sections)})"
-
-    def summarize(self) -> str:
-        return self.content[:100] + "..." if len(self.content) > 100 else self.content 
+        return f"Chapter(id={self.id}, source_document={self.source_document}, sections_count={len(self.sections)}, contents_count={len(self.contents)})"
 

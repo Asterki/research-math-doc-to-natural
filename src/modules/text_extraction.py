@@ -1,42 +1,50 @@
 import os 
-from typing import List
+from typing import List, Tuple
 
 from utils import verbose_print
 
 from models.document import Document
+from models.page import Page 
 
-
-def read_data_dir(document_types: str) -> List[Document]:
+def text_extraction(document_types: List[str], documents_path: str) -> Tuple[List[Document], List[Page]]:
     """
-    Etapa 1: Cargar documentos de texto desde el directorio especificado. 
-    Soporta archivos con extensiones definidas en 'document_types'. 
-    Almacena el contenido de los documentos en una lista para procesamiento posterior. 
+    Etapa 1: Cargar documentos de texto desde el directorio especificado.
+    Soporta archivos con extensiones definidas en 'document_types'.
+    Almacena el contenido de los documentos en una lista para procesamiento posterior.
+
+    Args: 
+        document_types (str): Lista de extensiones de archivo soportadas (ej. ["txt", "md"]).
+        documents_path (str): Ruta al directorio que contiene los documentos.
+    Returns:
+        List[Document]: Lista de objetos Document con el contenido extraído.
     """
 
-    text_documents = []
+    documents: list[Document] = []
+    pages: list[Page] = []
 
-    # Enlistar las carpetas en el directorio de documentos 
-    verbose_print(f"Escaneando directorio de documentos: data")
-    folders = os.listdir("data") 
-    for folder in folders:
-        folder_path = os.path.join("data", folder)
-        if os.path.isdir(folder_path):
-            verbose_print(f"Procesando carpeta: {folder}")
-           
-            # Enlistar los archivos en la carpeta
-            for filename in os.listdir(folder_path):
-                file_path = os.path.join(folder_path, filename)
-                if os.path.isfile(file_path):
-                    file_ext = filename.split(".")[-1].lower()
-                    # Verificar si el archivo es de un tipo soportado
-                    if file_ext in document_types:
-                        verbose_print(f"  Procesando archivo: {filename}")
+    # Parent folders: "Documents"
+    # Child items: "Pages"
 
-                        # Leer el contenido del archivo de texto 
-                        with open(file_path, "r", encoding="utf-8") as f:
-                            content = f.read()
-                            text_documents.append(Document(source=filename, content=content)) 
-                    else:
-                        verbose_print(f"  Archivo ignorado (tipo no soportado): {filename}")
+    # List out all of the "Documents"
+    for document in os.listdir(documents_path):
+        current_document = Document(name=document, path=os.path.join(documents_path, document))
 
-    return text_documents
+        # List out all of the "Pages"
+        for page in os.listdir(os.path.join(documents_path, document)):
+            # Check if they are of a supported type
+            page_extension = page.split(".")[-1]
+            if page_extension in document_types:
+
+                # Create the pages and add them to the document
+                with open(os.path.join(documents_path, document, page), "r", encoding="utf-8") as file:
+                    content = file.read()
+                    current_page = Page(parent_document=current_document, content=content)
+                    current_document.pages.append(current_page)
+                    pages.append(current_page)
+                    verbose_print(f"[Text Extraction] Loaded page: {page} from document: {document}") 
+
+        documents.append(current_document)
+
+    print(f"[Text Extraction] Loaded {len(documents)} documents with a total of {len(pages)} pages.") 
+
+    return documents, pages 
