@@ -48,3 +48,17 @@ def extract_latex(documents: list[Document], max_workers: int = None) -> dict:
             latex_contents[doc_id] = content
 
     return latex_contents
+
+def latex_verification():
+    sample_doc = Document(
+        source="sample.tex",
+        content="""
+        Here is some text with inline math $E=mc^2$ and display math:
+        \\[
+        \\int_a^b f(x) \\, dx = F(b) - F(a)
+        \\]
+        Also, a macro: \\newcommand{\\R}{\\mathbb{R}}
+        """
+    )
+    result = extract_latex_from_doc(sample_doc)
+    print(result)

@@ -23,6 +23,8 @@ def main():
 
     print("Iniciando Etapa 0: Extracción de texto de los documentos")
 
+    return; # Desactivar la ejecución de las etapas por ahora 
+
     print("Iniciando Etapa 1: Carga de Documentos de Texto")
     text_documents = read_data_dir(config["data"]["extensions"])
     print(f"Etapa 1 completada. Documentos cargados: {len(text_documents)}")
