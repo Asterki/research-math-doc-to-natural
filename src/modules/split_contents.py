@@ -41,8 +41,10 @@ def split_contents(documents: list[Document]) -> Tuple[list[Document], list[Chap
                 
                 elif line.startswith("### "): # New Section
                     
-                    current_section = Section(source_chapter=current_chapter, source_document=document)
+                    current_section = Section(source_chapter=current_chapter, source_document=document, name=line[3:].strip())
                     sections.append(current_section)
+                    document.sections.append(current_section) 
+                    current_chapter.sections.append(current_section)
                     verbose_print(f"[Split Contents] Created section: in chapter")
 
                 else:
