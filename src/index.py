@@ -37,13 +37,7 @@ def main():
     print("=============================================================")
 
 
-    print("From book", contents[0][3].name)
-    for chapter in contents[0][3].chapters:
-        print(" - Chapter:", chapter.name)
-        for index, section in enumerate(chapter.sections):
-            print(f"   - Section {index + 1}:", section.name)
-            for content in section.contents[0:2]:
-                print("     - Content:", content.content[0:50], "...")
+    
     
     # return; # Desactivar la ejecución de las etapas por ahora 
     #
