@@ -31,20 +31,21 @@ def main():
     verbose_print(f"  Documents: {documents[0:10]}")
     print("=============================================================")
     print("Iniciando Etapa 2.1: Separación de Contenidos en Capítulos, Secciones y Contenidos")
-    contents: list[Content] = split_contents(documents)
-    print(f"Etapa 2 completada. Contenidos Encontrados: {len(contents)}")
-    verbose_print(f"  Contents: {contents[0:10]}") 
+    documents: list[Document] = split_contents(documents)
+    print(f"Etapa 2 completada. Contenidos Encontrados: {len(documents)}")
+    verbose_print(f"  Contents: {documents[0:10]}") 
     print("=============================================================")
 
 
-    print("From book", contents[0][3].name)
-    for chapter in contents[0][3].chapters:
-        print(" - Chapter:", chapter.name)
-        for index, section in enumerate(chapter.sections):
-            print(f"   - Section {index + 1}:", section.name)
-            for content in section.contents[0:2]:
-                print("     - Content:", content.content[0:50], "...")
-    
+    # Testing output of split contents
+    print("From book", documents[0].name)
+    for chapter in documents[0].chapters:
+        print(" Chapter:", chapter.name)
+        for section in chapter.sections:
+            print("  Section:", section.name)
+            for content in section.contents:
+                print("   Content:", content.content)
+
     # return; # Desactivar la ejecución de las etapas por ahora 
     #
     # print("Iniciando Etapa 2: Extracción de Contenido LaTeX")
