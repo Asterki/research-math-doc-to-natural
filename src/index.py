@@ -37,15 +37,6 @@ def main():
     print("=============================================================")
 
 
-    # Testing output of split contents
-    print("From book", documents[0].name)
-    for chapter in documents[0].chapters:
-        print(" Chapter:", chapter.name)
-        for section in chapter.sections:
-            print("  Section:", section.name)
-            for content in section.contents:
-                print("   Content:", content.content)
-
     # return; # Desactivar la ejecución de las etapas por ahora 
     #
     # print("Iniciando Etapa 2: Extracción de Contenido LaTeX")
