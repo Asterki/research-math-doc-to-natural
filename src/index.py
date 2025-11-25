@@ -1,26 +1,27 @@
 import json
 import os
 
-# Importar la configuración 
+# Importar la configuración
 config = json.load(open("config.json", "r"))
 
 # Importar los modelos
-from models.content import Content
 from models.document import Document
 
 # Importar utilidades
 from utils import verbose_print
 
-# Importar las etapas del procesamiento 
-from modules.text_extraction import text_extraction  
-from modules.split_contents import split_contents 
+# Importar las etapas del procesamiento
+from modules.text_extraction import text_extraction
+from modules.split_contents import split_contents
 from modules.save_contents import save_contents
-# from modules.extract_latex import extract_latex  
-# from modules.latex_to_natural import latex_to_natural  
+
+# from modules.extract_latex import extract_latex
+# from modules.latex_to_natural import latex_to_natural
+
 
 def main():
-    # Create the artifacts directory if it doesn't exist 
-    os.makedirs(config["artifacts_path"], exist_ok=True) 
+    # Create the artifacts directory if it doesn't exist
+    os.makedirs(config["artifacts_path"], exist_ok=True)
 
     print("=============================================================")
     print("Utilidad De Conversión de Documentos para Evangelizadores IA")
@@ -31,22 +32,34 @@ def main():
     print(f"Configuración cargada: {config}")
     print("=============================================================")
     print("Iniciando Etapa 1: Carga de Documentos de Texto")
-    documents: list[Document] = text_extraction(config["data"]["extensions"], config["data"]["documents_path"])
+    documents: list[Document] = text_extraction(
+        config["data"]["extensions"], config["data"]["documents_path"]
+    )
     print(f"Etapa 1 completada. Documentos cargados: {len(documents)}")
     verbose_print(f"  Documents: {documents[0:10]}")
     print("=============================================================")
-    print("Iniciando Etapa 2.1: Separación de Contenidos en Capítulos, Secciones y Contenidos")
+    print(
+        "Iniciando Etapa 2.1: Separación de Contenidos en Capítulos, Secciones y Contenidos"
+    )
     documents: list[Document] = split_contents(documents)
     print(f"Etapa 2.1 completada.")
+
+    doc = documents[2]
+    for chapter in doc.chapters:
+        print(f"Chapter: {chapter.name}")
+        for section in chapter.sections:
+            print(f"  Section: {section.name}")
+            print(f"Content Preview: {section.content[0:100]}...\n")
+
     print("=============================================================")
     print("Iniciando Etapa 2.2: Guardado de Documentos con Contenidos Separados")
     save_contents(documents, config["artifacts_path"])
-    print(f"Etapa 2.2 completada. Puedes encontrar los documentos guardados en: {config['artifacts_path']}")
+    print(
+        f"Etapa 2.2 completada. Puedes encontrar los documentos guardados en: {config['artifacts_path']}"
+    )
     print("=============================================================")
 
-
-
-    # return; # Desactivar la ejecución de las etapas por ahora 
+    # return; # Desactivar la ejecución de las etapas por ahora
     #
     # print("Iniciando Etapa 2: Extracción de Contenido LaTeX")
     #
@@ -58,13 +71,13 @@ def main():
     #     latex_list.extend(content.get("math", []))
     #     latex_list.extend(content.get("macros", []))
     #
-    # # Remove duplicates 
+    # # Remove duplicates
     # latex_list = list(set(latex_list))
     #
     # print("Iniciando Etapa 3: Conversión de LaTeX a Lenguaje Natural")
     # latex_contents = latex_to_natural(latex_list[0:20], 20)
     # print(f"Etapa 3 completada. Documentos con contenido LaTeX extraído: {len(latex_contents)}")
 
+
 if __name__ == "__main__":
     main()
-
