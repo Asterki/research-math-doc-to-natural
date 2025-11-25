@@ -66,37 +66,7 @@ def save_contents(documents: List[Document], artifacts_path: str) -> None:
                 f"[Save Contents] Guardadas {len(orphan_contents)} entradas huérfanas en {orphan_file}"
             )
 
-        # # 2. Orphan sections that don't belong to any chapter
-        # orphan_sections = getattr(document, "orphan_sections", [])
-        # if orphan_sections:
-        #     orphan_dir = os.path.join(doc_dir, "orphan_sections")
-        #     os.makedirs(orphan_dir, exist_ok=True)
-        #     for sec in orphan_sections:
-        #         sec_name = _sanitize_filename_part(
-        #             getattr(sec, "name", None), f"orphan_section_{sec.id[:8]}"
-        #         )
-        #         sec_path = os.path.join(orphan_dir, f"{sec_name}.txt")
-        #         sec_path = _unique_path(sec_path)
-        #         # get section text: prefer Section.content, else join section.contents if present
-        #         content_text = ""
-        #         if hasattr(sec, "content") and sec.content:
-        #             content_text = sec.content
-        #         else:
-        #             # fall back to list of Content objects
-        #             parts = []
-        #             for c in getattr(sec, "contents", []):
-        #                 if isinstance(c, str):
-        #                     parts.append(c)
-        #                 else:
-        #                     parts.append(getattr(c, "content", str(c)))
-        #             content_text = "\n\n".join(parts)
-        #         with open(sec_path, "w", encoding="utf-8") as f:
-        #             f.write(content_text)
-        #         print(
-        #             f"[Save Contents] Guardada sección huérfana '{getattr(sec, 'name', '')}' en {sec_path}"
-        #         )
-
-        # 3. Chapters and their sections
+        # 2. Chapters and their sections
         for chapter in getattr(document, "chapters", []):
             chap_name_safe = _sanitize_filename_part(
                 getattr(chapter, "name", None), "untitled_chapter"
@@ -131,54 +101,18 @@ def save_contents(documents: List[Document], artifacts_path: str) -> None:
                     f"[Save Contents] Guardada sección '{getattr(section, 'name', '')}' del capítulo '{getattr(chapter, 'name', '')}' en {sec_path}"
                 )
 
-            # Also, if chapter has pages/content outside any section, try to preserve them:
-            # We check for any Section in chapter named "(orphan-section)" and save it as its own file
-            # for sec in getattr(chapter, "sections", []):
-            #     if getattr(sec, "name", "").startswith("(orphan-section"):
-            #         sec_name_safe = _sanitize_filename_part(
-            #             getattr(sec, "name", None), f"orphan_section_{sec.id[:8]}"
-            #         )
-            #         sec_path = os.path.join(chap_dir, f"{sec_name_safe}.txt")
-            #         sec_path = _unique_path(sec_path)
-            #         content_text = getattr(sec, "content", "")
-            #         with open(sec_path, "w", encoding="utf-8") as f:
-            #             f.write(content_text)
-            #         print(
-            #             f"[Save Contents] Guardada sección fallback '{getattr(sec, 'name', '')}' en {sec_path}"
-            #         )
-
-        # -------------------------
-        # 4) Full stitched document
-        # -------------------------
+        # save a full copy of the document with all contents stitched together
         full_path = os.path.join(doc_dir, "full.txt")
         full_path = _unique_path(full_path)
         parts: List[str] = []
 
-        # a) orphan contents first
+        # a. orphan contents first
         for item in orphan_contents:
             if isinstance(item, str):
                 parts.append(item)
             else:
                 parts.append(getattr(item, "content", str(item)))
-
-        # b) orphan sections
-        # for sec in orphan_sections:
-        #     text = ""
-        #     if hasattr(sec, "content") and sec.content:
-        #         text = sec.content
-        #     else:
-        #         subparts = []
-        #         for c in getattr(sec, "contents", []):
-        #             if isinstance(c, str):
-        #                 subparts.append(c)
-        #             else:
-        #                 subparts.append(getattr(c, "content", str(c)))
-        #         text = "\n\n".join(subparts)
-        #     header = f"=== Orphan Section: {getattr(sec, 'name', '')} ==="
-        #     parts.append(header)
-        #     parts.append(text)
-
-        # c) chapters and their sections
+        # b. chapters and their sections
         for chapter in getattr(document, "chapters", []):
             chap_header = f"\n\n=== Chapter: {getattr(chapter, 'name', '')} ===\n"
             parts.append(chap_header)
