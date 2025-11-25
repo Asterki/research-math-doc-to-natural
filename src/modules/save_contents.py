@@ -2,6 +2,7 @@ import os
 from typing import List, Optional
 
 from models.document import Document
+from utils import verbose_print
 
 
 # helper: sanitize filename component
@@ -62,7 +63,7 @@ def save_contents(documents: List[Document], artifacts_path: str) -> None:
                     else:
                         text = getattr(item, "content", str(item))
                     f.write(text + "\n\n")
-            print(
+            verbose_print(
                 f"[Save Contents] Guardadas {len(orphan_contents)} entradas huérfanas en {orphan_file}"
             )
 
@@ -97,7 +98,7 @@ def save_contents(documents: List[Document], artifacts_path: str) -> None:
 
                 with open(sec_path, "w", encoding="utf-8") as f:
                     f.write(content_text)
-                print(
+                verbose_print(
                     f"[Save Contents] Guardada sección '{getattr(section, 'name', '')}' del capítulo '{getattr(chapter, 'name', '')}' en {sec_path}"
                 )
 
