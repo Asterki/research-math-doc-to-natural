@@ -1,4 +1,5 @@
 import json
+import os
 
 # Importar la configuración 
 config = json.load(open("config.json", "r"))
@@ -12,11 +13,15 @@ from utils import verbose_print
 
 # Importar las etapas del procesamiento 
 from modules.text_extraction import text_extraction  
-from modules.split_contents import split_contents
+from modules.split_contents import split_contents 
+from modules.save_contents import save_contents
 # from modules.extract_latex import extract_latex  
 # from modules.latex_to_natural import latex_to_natural  
 
 def main():
+    # Create the artifacts directory if it doesn't exist 
+    os.makedirs(config["artifacts_path"], exist_ok=True) 
+
     print("=============================================================")
     print("Utilidad De Conversión de Documentos para Evangelizadores IA")
     print("Creado por Fernando Rivera (https://asterkiwebsite.vercel.app)")
@@ -32,9 +37,13 @@ def main():
     print("=============================================================")
     print("Iniciando Etapa 2.1: Separación de Contenidos en Capítulos, Secciones y Contenidos")
     documents: list[Document] = split_contents(documents)
-    print(f"Etapa 2 completada. Contenidos Encontrados: {len(documents)}")
-    verbose_print(f"  Contents: {documents[0:10]}") 
+    print(f"Etapa 2.1 completada.")
     print("=============================================================")
+    print("Iniciando Etapa 2.2: Guardado de Documentos con Contenidos Separados")
+    save_contents(documents, config["artifacts_path"])
+    print(f"Etapa 2.2 completada. Puedes encontrar los documentos guardados en: {config['artifacts_path']}")
+    print("=============================================================")
+
 
 
     # return; # Desactivar la ejecución de las etapas por ahora 
