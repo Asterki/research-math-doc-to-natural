@@ -43,14 +43,6 @@ def main():
     )
     documents: list[Document] = split_contents(documents)
     print(f"Etapa 2.1 completada.")
-
-    doc = documents[2]
-    for chapter in doc.chapters:
-        print(f"Chapter: {chapter.name}")
-        for section in chapter.sections:
-            print(f"  Section: {section.name}")
-            print(f"Content Preview: {section.content[0:100]}...\n")
-
     print("=============================================================")
     print("Iniciando Etapa 2.2: Guardado de Documentos con Contenidos Separados")
     save_contents(documents, config["artifacts_path"])
