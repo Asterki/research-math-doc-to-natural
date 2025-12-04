@@ -3,6 +3,7 @@
     "extensions": ["txt", "md", "json"],
     "documents_path": "./data"
   },
+  "artifacts_path": "./artifacts",
   "max_workers": 4,
   "llm": {
     "model": "gpt-4-turbo",

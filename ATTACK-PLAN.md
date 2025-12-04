@@ -12,9 +12,9 @@ Estado: Completado
 3. Verificar que los documentos se hayan extraído correctamente. **Estado: No Automatizado 
 
 ## Etapa 2: Separación de contenidos
-**Estado:** No Automatizado
+**Estado:** Parcialmente Automatizado
 
-1. Separar y unir los trozos de contenidos a sus respectivas secciones y capítulos, utilizando delimitaciones. Estado: **No Automatizado**
+1. Separar y unir los trozos de contenidos a sus respectivas secciones y capítulos, utilizando delimitaciones. Estado: **Parcialmente Automatizado**
 2. Clasificar cada trozo de contenido en unidades que caigan en las siguientes categorías: Párrafo, Definición, Teorema, Ejemplo. **Estado: No Automatizado**
 3. Separación de contenido en distintas carpetas, del nivel más alto a más bajo: Libro -> Capítulo -> Sección -> Definición/Teorema/Ejemplo/Párrafo. **Estado: No Automatizado**
 

@@ -6,8 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Project-specific files
 data 
 SYMLIST
+artifacts
 
 # Distribution / packaging
 .Python
