@@ -36,6 +36,14 @@ def main():
     verbose_print(f"  Contents: {documents[0:10]}") 
     print("=============================================================")
 
+    for doc in documents:
+        print(f"Documento: {doc.name}")
+        for chapter in doc.chapters:
+            print(f"  Capítulo: {chapter.name}")
+            for section in chapter.sections:
+                print(f"    Sección: {section.name}")
+                for content in section.contents:
+                    print(f"      Contenido: {content.content_type} - {content.content[0:30]}...")
 
     # return; # Desactivar la ejecución de las etapas por ahora 
     #

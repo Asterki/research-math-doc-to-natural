@@ -26,12 +26,11 @@ def split_contents(documents: list[Document]) -> list[Document]:
         sections = []
         section_index = 0
 
-        current_chapter = Chapter(source_document=document, name="") 
-        current_section = Section(source_chapter=current_chapter, source_document=document)
+        current_chapter = Chapter(source_document=document, name="Orphan Chapter") 
+        current_section = Section(source_chapter=current_chapter, source_document=document, name="Orphan Section")
 
         for page in document.pages:
             page_lines = page.content.split("\n") 
-            current_section = None 
 
             for line in page_lines: 
                 if line.startswith("## "): # New Chapter
@@ -51,6 +50,7 @@ def split_contents(documents: list[Document]) -> list[Document]:
                     verbose_print(f"[Split Contents] Created section: in chapter")
 
                 else: # Content
+                    print(line)
                     if current_section is not None:
                         content = Content(source_section=current_section, source_chapter=current_chapter, source_document=document, content=line, content_type="text")
                         verbose_print(f"[Split Contents] Added content to section") 
